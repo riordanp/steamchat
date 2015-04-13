@@ -1,0 +1,27 @@
+{
+  "name": "steamchat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "steam": "^0.6.8",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Riordan Panayides",
+  "license": "ISC",
+  "window": {
+    "toolbar": true,
+    "resizable": true,
+    "width": 300,
+    "height": 600,
+    "min_width": 200,
+    "min_height": 50,
+    "max_width": 1000,
+    "max_height": 600,
+    "position": "center"
+  }
+}

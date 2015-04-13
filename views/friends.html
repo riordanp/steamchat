@@ -1,0 +1,15 @@
+<div id="friendsList" class="ui selection list">
+    <div class="selected item">
+        <img class="ui avatar image" src="">
+        <div class="content">
+            <div class="header">{{me.playerName}}</div>
+        </div>
+    </div>
+    <div class="ui horizontal divider">~</div>
+    <div ng-repeat="friend in friends" class="item">
+        <img class="ui avatar image" src="">
+        <div class="content">
+            <div class="header">{{friend.playerName}}</div>
+        </div>
+    </div>
+</div>

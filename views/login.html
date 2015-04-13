@@ -1,0 +1,37 @@
+<form class="ui form">
+<h4 class="ui dividing header">Sign In</h4>
+<div class="two fields">
+    <div class="required field">
+      <label>Username</label>
+      <div class="ui icon input">
+        <input ng-model="accountName" placeholder="Username" type="text" />
+        <i class="user icon"></i>
+      </div>
+    </div>
+    <div class="required field">
+      <label>Password</label>
+      <div class="ui icon input">
+        <input ng-model="accountPassword" type="password">
+        <i class="lock icon"></i>
+      </div>
+    </div>
+</div>
+<button ng-click="login(accountName, accountPassword)" class="ui submit button">Login with Steam</button>
+</form>
+<div id="steamguardmodal" class="ui basic modal">
+  <div class="header">
+    Authenticate
+  </div>
+  <div class="content">
+    <div class="description">
+      <p>Please enter the steamguard code you recieved in your email inbox.</p>
+      <div class="ui input"><input ng-model="authCode" type="text" /></div>
+    </div>
+  </div>
+  <div class="actions">
+      <button ng-click="loginAuth(accountName, accountPassword, authCode)" class="ui green basic inverted button">
+        <i class="checkmark icon"></i>
+        Login
+       </button>
+  </div>
+</div>
