@@ -1,0 +1,18 @@
+<div ng-controller="FriendsController" class="ui visible left vertical sidebar menu" id="friends">
+    <a class="item">
+        <div class="ui avatar image"><img src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/{{me.avatarHash.substr(0,2)}}/{{me.avatarHash}}_full.jpg" style="width: 32px; height: 32px;"></img></div>{{me.playerName}}
+    </a>
+    <div class="ui horizontal divider">~</div>
+    <a ng-repeat="friend in friends" class="item">
+        <div class="ui avatar image"><img src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/{{friend.avatarHash.substr(0,2)}}/{{friend.avatarHash}}_full.jpg" style="width: 32px; height: 32px;"></img></div>{{friend.playerName}} 
+        <i class="circle thin  icon" style="color: {{stateColor(friend.personaState)}}; margin-top: 10px;"></i>
+    </a>
+</div>
+<div ng-controller="ChatController" class="pusher" id="chat">
+<div id="messageList" class="ui relaxed list">
+    <div ng-repeat="message in messages" class="item">
+            {{partnerName}}: {{message}}
+        </div>
+    </div>
+</div>
+</div>

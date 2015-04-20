@@ -28,35 +28,41 @@ client.on('loggedOn', function(){
     console.log("Logged in, my SteamID is ", mySteamID);
     client.requestFriendData(mySteamID);
     client.setPersonaState(Steam.EPersonaState.Online);
-    setTimeout(function () { window.location.hash = "./friends"; }, 1000);
+    setTimeout(function () { window.location.hash = "./dash"; }, 1000);
 });
 
 client.on('sentry', function(hash) {
-    console.log("Recieved sentry has, writing to file");
+    console.log("Recieved sentry hash, writing to file");
     FS.writeFile('sentry.hash', hash);
 });
 
 client.on('friendMsg', function(steamID, message, type) {
     if (type == Steam.EChatEntryType.ChatMsg) { // Regular chat message
-        friends[steamID].messages = [];
         friends[steamID].messages.push(message);
         console.log("Message from " + friends[steamID].playerName + ": " + friends[steamID].messages[0]);
-        var win = gui.Window.open('./index.html#/chat/'+steamID, {
-          position: 'center',
-          width: 400,
-          height: 300
-        });
+        var scope = angular.element($('#chat')).scope();
+        scope.setActiveChat(steamID);
     }
 });
 
+//persona states
+// 1 = online
+// 2 = busy
+// 3 = away
+// 5 = looking to trade
+// 6 = looking to play
+
 client.on('user', function(data) {
-    var scope = angular.element($('html')).scope();
+    var scope = angular.element($('#friends')).scope();
     if(data.friendid == mySteamID) {
         me = data;
+        me.avatarHash = me.avatarHash.toString('hex');
         scope.friends = _.values(friends);
         scope.$apply();   
     } else {
         friends[data.friendid] = data;
+        friends[data.friendid].avatarHash = friends[data.friendid].avatarHash.toString('hex');
+        friends[data.friendid].messages = [];
         scope.friends = _.values(friends);
         scope.$apply();
     } 
@@ -79,11 +85,15 @@ steamchatApp.config(['$routeProvider',
         templateUrl: './views/login.html',
         controller: 'LoginController'
       }).
+      when('/dash', {
+        templateUrl: './views/dash.html',
+        controller: 'DashController'
+      }).
       when('/friends', {
         templateUrl: './views/friends.html',
         controller: 'FriendsController'
       }).
-      when('/chat/:friendID', {
+      when('/chat', {
         templateUrl: './views/chat.html',
         controller: 'ChatController'
       }).
