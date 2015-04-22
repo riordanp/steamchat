@@ -3,7 +3,6 @@ var _ = require('underscore');
 var FS = require('fs');
 var gui = require('nw.gui');
 var friends  = [];
-var messages = []
 var me;
 var sentryHash = null;
 var client = new Steam.SteamClient();
@@ -43,8 +42,8 @@ client.on('sentry', function(hash) {
 
 client.on('friendMsg', function(steamID, message, type) {
     if (type == Steam.EChatEntryType.ChatMsg) { // Regular chat message
-        messages[steamID].push({senderID: steamID, senderName: friends[steamID].playerName, body: message});
-        console.log("Message from " + messages[steamID][0].senderName + ": " + messages[steamID][0].body);
+        friends[steamID].messages.push(message);
+        console.log("Message from " + friends[steamID].playerName + ": " + friends[steamID].messages[0]);
         var scope = angular.element($('#chat')).scope();
         scope.setActiveChat(steamID);
     }
@@ -67,7 +66,7 @@ client.on('user', function(data) {
     } else {
         friends[data.friendid] = data;
         friends[data.friendid].avatarHash = friends[data.friendid].avatarHash.toString('hex');
-        messages[data.friendid] = [];
+        friends[data.friendid].messages = [];
         scope.friends = _.values(friends);
         scope.$apply();
     } 

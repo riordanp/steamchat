@@ -38,10 +38,6 @@ steamchatControllers.controller('FriendsController', ['$scope',
                 return 'grey'; //offline or unknown state
             }
         }
-        $scope.setActiveChat = function(steamID) {
-            var chatScope = angular.element($('#chat')).scope();
-            chatScope.setActiveChat(steamID);
-        }
   }]);
 
 steamchatControllers.controller('DashController', ['$scope',
@@ -53,17 +49,13 @@ steamchatControllers.controller('ChatController', ['$scope',
   function($scope) {
         $scope.partnerID = -1;
         $scope.setActiveChat = function(steamID) {
-            console.log("Now chatting with " + friends[steamID].playerName);
-            $scope.messages = messages[steamID];
+            $scope.messages = friends[steamID].messages;
             $scope.partnerID = steamID;
             $scope.partnerAvatarHash = friends[steamID].avatarHash;
             $scope.partnerName = friends[steamID].playerName;
             $scope.$apply();
-        }
+        };
         $scope.sendMessage = function() {
-            var message = $('#messageBox').val();
-            $('#messageBox').value = "";
-            messages[$scope.partnerID].push({senderID: mySteamID, senderName: me.playerName, body: message});
-            sendFriendMessage($scope.partnerID, message);
+            sendFriendMessage($scope.partnerID, $('#messageBox').val());
         }
   }]);
