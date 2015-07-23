@@ -12,16 +12,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Riordan Panayides",
-  "license": "ISC",
+  "license": "",
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "resizable": true,
-    "width": 700,
-    "height": 600,
+    "width": 600,
+    "height": 500,
     "min_width": 200,
     "min_height": 50,
-    "max_width": 1000,
-    "max_height": 600,
-    "position": "center"
+    "max_width": 600,
+    "max_height": 500,
+    "position": "right"
   }
 }

@@ -8,7 +8,8 @@ var me;
 var sentryHash = null;
 var client = new Steam.SteamClient();
 var mySteamID;
-
+var friendsScope;
+var chatScope;
 var steamchatApp = angular.module('steamchatApp', [
   'ngRoute',
   'steamchatControllers'
@@ -16,6 +17,16 @@ var steamchatApp = angular.module('steamchatApp', [
 
 function sendFriendMessage(steamID, message) {
     client.sendMessage(steamID, message);
+}
+
+function getAvatarURL(hash) {
+    var tag = hash.substr(0, 2);
+    var url = "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/" + tag + "/" + hash + "_full.jpg";
+    if(hash == "0000000000000000000000000000000000000000"){
+      return "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg"
+    } else {
+      return url;
+    }
 }
 
 client.on('error', function(error) {
@@ -33,7 +44,8 @@ client.on('loggedOn', function(){
     console.log("Logged in, my SteamID is ", mySteamID);
     client.requestFriendData(mySteamID);
     client.setPersonaState(Steam.EPersonaState.Online);
-    setTimeout(function () { window.location.hash = "./dash"; }, 1000);
+    setTimeout(function () { window.location.hash = "./dash"; }, 0);
+    //window.location.hash = "./dash";
 });
 
 client.on('sentry', function(hash) {
@@ -46,36 +58,50 @@ client.on('friendMsg', function(steamID, message, type) {
         messages[steamID].push({senderID: steamID, senderName: friends[steamID].playerName, body: message});
         console.log("Message from " + messages[steamID][0].senderName + ": " + messages[steamID][0].body);
         var scope = angular.element($('#chat')).scope();
-        scope.setActiveChat(steamID);
+        if(scope.partnerID != -1) {
+          scope.setActiveChat(steamID);
+        }
+        scope.refreshChat();
+        var objDiv = document.getElementById("messageList");
+        objDiv.scrollTop = objDiv.scrollHeight;
     }
 });
 
-//persona states
+//persona states (steam)
 // 1 = online
 // 2 = busy
 // 3 = away
+// 4 = snooze
 // 5 = looking to trade
 // 6 = looking to play
 
+//message states (internal)
+// 0 = no message this session
+// 1 = some messages this session (aka open chat)
+// 2 = unread messages
+
+
 client.on('user', function(data) {
-    var scope = angular.element($('#friends')).scope();
+var friendsScope = angular.element($('#friends')).scope();
     if(data.friendid == mySteamID) {
         me = data;
         me.avatarHash = me.avatarHash.toString('hex');
-        scope.friends = _.values(friends);
-        scope.$apply();   
+        friendsScope.refreshFriends();
     } else {
+      if(data.friendid in friends) {
+        friends[data.friendid] = data;
+        friends[data.friendid].avatarHash = friends[data.friendid].avatarHash.toString('hex');
+      } else {
         friends[data.friendid] = data;
         friends[data.friendid].avatarHash = friends[data.friendid].avatarHash.toString('hex');
         messages[data.friendid] = [];
-        scope.friends = _.values(friends);
-        scope.$apply();
-    } 
-    console.log("user");      
+      }
+
+        friendsScope.refreshFriends();
+    }
 });
 
 client.on('relationships', function() {
-    console.log("relationships");
     var ids = [];
     _.each(client.friends, function(relationship, steamID) {
         ids.push(steamID);
