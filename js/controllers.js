@@ -66,26 +66,13 @@ steamchatControllers.controller('FriendsController', ['$scope',
                 var friend = friends[i];
 
                 if(messages[friend.friendid].length > 0){
-                  friend.messageState = 1;
+                    friend.messageState = 1;
                 }
                 else
                 {
                     friend.messageState = 0;
                 }
             }
-
-            /*_.each(friends, function(friend, steamID) {
-                console.log(friend.playerName);
-                if(friend.friendid in messages){
-                  friend.messageState = 1;
-                  console.log(friend.playerName);
-                }
-                else
-                {
-                    friend.messageState = 0;
-                    console.log(friend.playerName);
-                }
-            });*/
 
             $scope.friends = _.values(friends);
             $scope.onlineFriends = _.where($scope.friends, function(f){ return f.personaState > 0; });

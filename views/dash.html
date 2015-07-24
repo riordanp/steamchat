@@ -3,16 +3,18 @@
             <div class="ui avatar image"><img src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/{{me.avatarHash.substr(0,2)}}/{{me.avatarHash}}_full.jpg" style="width: 32px; height: 32px;"></img></div>{{me.playerName}}
         </a>
         <div class="ui horizontal divider">~</div>
-        <a ng-repeat="friend in onlineFriends | orderBy:['-messageState','personaState']" style="background-color: {{stateActivityIndicator(friend.messageState)}};" ng-click="setActiveChat(friend.friendid)" class="item">
-            <div class="ui avatar image"><img src="{{getAvatarURL(friend.avatarHash)}}" style="width: 32px; height: 32px;"></img></div>{{friend.playerName}}
-            <i class="circle thin icon" style="color: {{stateColor(friend.personaState)}}; margin-top: 10px;"></i>
-        </a>
+        <div id="friendsList">
+          <a ng-repeat="friend in onlineFriends | orderBy:['-messageState','personaState','playerName']" style="background-color: {{stateActivityIndicator(friend.messageState)}};" ng-click="setActiveChat(friend.friendid)" class="item">
+              <div class="ui avatar image"><img src="{{getAvatarURL(friend.avatarHash)}}" style="width: 32px; height: 32px;"></img></div>{{friend.playerName}}
+              <i class="circle thin icon" style="color: {{stateColor(friend.personaState)}}; margin-top: 10px;"></i>
+          </a>
+        </div>
     </div>
     <div ng-controller="ChatController" class="pusher" id="chat">
         <div class="ui grid">
-            <div style="height: 360px;" class="three column row">
+            <div style="height: 330px;" class="three column row">
                 <div class="five wide column" >
-                    <div id="messageList" style="width: 320px; height: 350px; padding-left: 10px; overflow-y: scroll;" class="ui relaxed list">
+                    <div id="messageList" style="width: 320px; height: 320px; padding-left: 10px; overflow-y: scroll;" class="ui relaxed list">
                         <div ng-repeat="message in messages" class="item">
                                 {{message.senderName}}: {{message.body}}
                         </div>
@@ -22,12 +24,18 @@
             <div class="two column row ui form">
                 <div class="seven wide column">
                     <div class="twelve wide field">
-                        <textarea style="width: 250px; height: 40px;" cols="50" rows="2" id="messageBox"></textarea>
+                        <textarea style="width: 250px; height: 20px; margin-right: 0px;" cols="50" rows="2" id="messageBox"></textarea>
                     </div>
                 </div>
                 <div class="five wide column">
-                    <button class="ui submit button" ng-click="sendMessage()">Send</div>
+                    <button class="right attached ui submit button" style="margin-left: -15px; margin-top: 1px;" ng-click="sendMessage()">Send</div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+    $('#messageBox').emojiPicker({
+      height: '200px',
+      width: '250px'
+    });
+    </script>
