@@ -20,6 +20,7 @@ function sendFriendMessage(steamID, message) {
 }
 
 function getAvatarURL(hash) {
+  if(hash) {
     var tag = hash.substr(0, 2);
     var url = "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/" + tag + "/" + hash + "_full.jpg";
     if(hash == "0000000000000000000000000000000000000000"){
@@ -27,6 +28,21 @@ function getAvatarURL(hash) {
     } else {
       return url;
     }
+  }
+}
+
+function setMyPersona(stateID) {
+  if(stateID == 1) {
+      client.setPersonaState(Steam.EPersonaState.Online);
+  } else if(stateID == 2){
+      client.setPersonaState(Steam.EPersonaState.Busy);
+  } else if(stateID == 3){
+      client.setPersonaState(Steam.EPersonaState.Away);
+  } else if(stateID == 4){
+      client.setPersonaState(Steam.EPersonaState.Snooze);
+  } else {
+    console.log("Error, invalid persona state");
+  }
 }
 
 client.on('error', function(error) {

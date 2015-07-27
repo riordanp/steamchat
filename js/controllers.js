@@ -44,7 +44,7 @@ steamchatControllers.controller('FriendsController', ['$scope',
         }
         $scope.stateActivityIndicator = function(state) {
           if(state == 0) {
-            return 'white'; //no activity this session
+            return 'none'; //no activity this session
           } else if(state == 1) {
             return 'rgb(209, 227, 231)'; //some activity this session
           } else if(state == 2) {

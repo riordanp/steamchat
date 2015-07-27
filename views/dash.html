@@ -1,7 +1,28 @@
     <div ng-controller="FriendsController" class="ui visible left vertical sidebar menu" id="friends">
-        <a ng-click="refreshFriends()"class="item">
-            <div class="ui avatar image"><img src="http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/{{me.avatarHash.substr(0,2)}}/{{me.avatarHash}}_full.jpg" style="width: 32px; height: 32px;"></img></div>{{me.playerName}}
-        </a>
+        <div class="item" style="z-index: 100;">
+            <div class="ui avatar image"><img src="{{getAvatarURL(me.avatarHash)}}" style="width: 32px; height: 32px;"></img></div>{{me.playerName}}
+            <div class="ui floating labeled icon dropdown" id="personaStateChooser" style="z-index: 101; overflow: visible !important; margin-right: -3px; float: right;">
+              <i class="circle thin icon" style="color: {{stateColor(me.personaState)}}; margin-top: 10px;"></i>
+              <div class="menu" style="margin-left: -80px;">
+                <div class="item" data-stateID="1">
+                  <i class="green circle thin icon"></i>
+                  Online
+                </div>
+                <div class="item" data-stateID="2">
+                  <i class="red circle thin icon"></i>
+                  Busy
+                </div>
+                <div class="item" data-stateID="3">
+                  <i class="orange circle thin icon"></i>
+                  Away
+                </div>
+                <div class="item" data-stateID="4">
+                  <i class="pink circle thin icon"></i>
+                  Snooze
+                </div>
+              </div>
+            </div>
+        </div>
         <div class="ui horizontal divider">~</div>
         <div id="friendsList">
           <a ng-repeat="friend in onlineFriends | orderBy:['-messageState','personaState','playerName']" style="background-color: {{stateActivityIndicator(friend.messageState)}};" ng-click="setActiveChat(friend.friendid)" class="item">
@@ -10,7 +31,7 @@
           </a>
         </div>
     </div>
-    <div ng-controller="ChatController" class="pusher" id="chat">
+    <div ng-controller="ChatController" class="pusher" id="chat" style="z-index: -2;">
         <div class="ui grid">
             <div style="height: 330px;" class="three column row">
                 <div class="five wide column" >
@@ -37,5 +58,12 @@
     $('#messageBox').emojiPicker({
       height: '200px',
       width: '250px'
+    });
+    $('#personaStateChooser').dropdown({
+      action: 'select',
+      onChange: function(value, text, $selectedItem) {
+        var stateID = $selectedItem.data("stateid");
+        setMyPersona(stateID);
+      }
     });
     </script>
